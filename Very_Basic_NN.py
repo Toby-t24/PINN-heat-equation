@@ -117,7 +117,7 @@ def gradient_descent(X, Y, lr_0, iterations):
         
         W1, b1, W2, b2, W3, b3 = update_param(
             W1, b1, W2, b2, W3, b3,
-            dW1, db1, dW2, db2, dW3, db3, alpha
+            dW1, db1, dW2, db2, dW3, db3, lr
         )
         
         if i % 100 == 0:
