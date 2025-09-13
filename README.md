@@ -1,7 +1,7 @@
 # PINN-heat-equation
 A Physics Informed Neural Network to solve the heat equation in 1 dimensions.
 
-This project is inspired by Raissi, Perdikaris, and Karniadakis's 2019 paper, Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations, published in the Journal of Computational Physics (Vol. 378, pp. 686–707).
+This project is inspired by Raissi, Perdikaris, and Karniadakis's 2019 paper, Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations, published in the Journal of Computational Physics (Vol. 378, pp. 686–707). This project demonstrates how a neural network can combine data-driven inference with the governing physics of the system to produce optimized solutions.
 
 ## Project Steps
 * Construct the heat equation data and adapt it for a suitable neural network
@@ -42,5 +42,32 @@ $$\Large \frac{\partial J}{\partial W^{(l)}} = \frac{1}{m} \delta^{(l)} (a^{(l-1
 $$\Large \frac{\partial J}{\partial b^{(l)}} = \frac{1}{m} \sum_{i=1}^{m} \delta^{(l)(i)}$$
 
 Where: $$W$$ = weights,  $$b$$ = biases,  $$a$$ = activations,  $$z$$ = pre-activations,  $$δ$$ = errors,  $$η$$ = learning rate,  $$σ$$ = activation function
+
+A simple neural network struggles to capture the dynamics of the heat equation—the output barely resembles the true solution, as illustrated below:
+
+![heat_eqn_prediction_vs_true](https://github.com/user-attachments/assets/2f2f0736-a688-4966-998f-97316501c014)
+
+## Building the PINN
+To penalise the incorrect solution displayed in the previous network, we can implement 4 different loss functions functions.
+* Regular Data Loss
+* Physics Data Loss (this is what makes the network a PINN)
+* Initial conditions
+* Boundary conditions
+
+The final two conditions play a crucial role in ensuring that the network does not collapse to the trivial null solution, which would satisfy the loss function without capturing the true dynamics. To handle these dynamics, the physics loss function encourages the network to output a solution that is mathematically accurate. The implementation of this function is considerably more challenging because it requires the design of a new forward propagation function capable of maintaining a record of the partial derivatives.
+
+<img width="1710" height="580" alt="image" src="https://github.com/user-attachments/assets/a1583e4e-0fe2-48c0-bcb1-b5d628fae3fb" />
+
+<br>
+
+Gradient descent also becomes more complex as the different loss components may conflict with each other. By introducing weighting parameters $$(λ)$$, it allow us to control the relative importance of each constraint, determining how strictly we enforce data fitting versus physics compliance.
+
+<br>
+
+$$\Large L_{\text{total}} = L_{\text{data}} + \lambda_{\text{PDE}} L_{\text{PDE}} + \lambda_{\text{IC}} L_{\text{IC}} + \lambda_{\text{BC}} L_{\text{BC}}$$
+
+These λ values can be tuned in the PINN.py code. I recommend increasing λ_PDE if the solution exhibits massive scaling issues, and increasing λ_IC if the solution remains stuck near zero.
+Note that training takes approximately 30 minutes with the default parameters, this could increase with altered parameters. The default solution is shown below:
+
 
 
