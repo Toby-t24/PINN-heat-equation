@@ -1,3 +1,5 @@
+import numpy as np
+
 # Tanh(x) is used here as the activation function for the hidden layers
 
 def tanh(x):
