@@ -69,5 +69,6 @@ $$\Large L_{\text{total}} = L_{\text{data}} + \lambda_{\text{PDE}} L_{\text{PDE}
 These λ values can be tuned in the PINN.py code. I recommend increasing λ_PDE if the solution exhibits massive scaling issues, and increasing λ_IC if the solution remains stuck near zero.
 Note that training takes approximately 30 minutes with the default parameters, this could increase with altered parameters. The default solution is shown below:
 
+![pinn_vs_true](https://github.com/user-attachments/assets/5eed4f5a-228e-43e5-b158-1a93ca77ba4b)
 
 
